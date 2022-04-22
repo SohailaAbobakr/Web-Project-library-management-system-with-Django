@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'afterlogin.css' %}">
+</head>
+<body>
+    <header>    
+        <nav>
+            {% load static %}
+            <p class="name"><img class="logo" src="{% static 'open-book.jpg' %}" alt="open-book"> Cairo University Library</p>
+            <ul type="none">  
+                <li><a href="{% url 'afterlogin' %}"class="active">Home</a></li>
+                <li><a href="{% url 'update' %}">Update</a></li>
+                <li><a href="{% url 'books'%}">Books</a></li>
+                <li ><a href="{% url 'logout' %}">LogOut</a></li>  
+            </ul>    
+        </nav>
+    </header>
+        <form action="{% url 'adminpage' %}" method="GET" id="addform" onsubmit="return addBook()">
+            {% csrf_token %}
+            <label for="bookname" style="color: antiquewhite; font-size:30px"> Book Name</label>
+            <br>
+            <input type="text" id="bookname" name="bookname" style="width: 400px; height: 40px"> 
+            <br> <br>
+
+            <label for="authname" style="color: antiquewhite; font-size:30px"> Author Name</label>
+            <br>
+            <input type="text" id="authname" name="authname" style="width: 400px; height: 40px">
+            <br> <br>
+
+            <label for="isbn" style="color: antiquewhite; font-size:30px">ISBN</label>
+            <br>
+            <input type="number" id="isbn" name="isbn" style="width: 400px; height: 40px">
+            <br> <br>
+
+            <label for="isborrowed" style="color: antiquewhite; font-size:30px">Is Borrowed</label>
+            <input type="checkbox" id="isborrowed" name="isborrowed"  style="width: 400px; height: 40px; ">
+            <br> <br>
+
+            <label for="maxborrowingperiod" style="color: antiquewhite; font-size:30px">max Borrowing Period</label>
+            <br>
+            <input type="number" id="maxborrowingperiod" name="maxborrowingperiod" style="width: 400px; height: 40px">
+            <br> <br>
+
+            <label for="publicationyear" style="color: antiquewhite; font-size:30px"> Publication Date</label>
+            <br>
+            <input type="date" id="publicationyear" name="publicationyear" style="width: 400px; height: 40px">
+            <br> <br>
+            <button type="submit" style="width: 300px; height: 40px; color:antiquewhite">ADD</button>
+        </form>
+        <div id="output">
+
+        </div>
+        <script>
+            function addBook(){
+                var bookname = document.getElementById("bookname").value
+                var authname = document.getElementById("authname").value
+                var isbn = document.getElementById("isbn").value
+                var isborrowed = document.getElementById("isborrowed").checked
+                var maxborrowingperiod = parseInt(document.getElementById("maxborrowingperiod").value)
+                var publicationyear = document.getElementById("publicationyear").value
+                var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value
+                if(!validateNotEmpty(bookname)) {
+                    alert("Book name can't be empty")
+                    return false;
+                }
+
+                if(!validateNotEmpty(authname)) {
+                    alert("Author name can't be empty")
+                    return false;
+                }
+
+                if(!validateNumNotNegative(isbn)) {
+                    alert("ISBN can't be less than zero")
+                    return false;
+                }
+
+                if(!validateNumNotNegative(maxborrowingperiod)) {
+                    alert("Borrowing Period can't be less than zero")
+                    return false;
+                }
+
+                if(!validateNotEmpty(publicationyear)) {
+                    alert("Publication year can't be empty")
+                    return false;
+                }
+
+                const xhttp = new XMLHttpRequest();
+                xhttp.onload = function() {
+                    document.getElementById("output").innerHTML = this.responseText;
+                    document.getElementById("addform").reset()
+                }
+                xhttp.open("POST", "{% url 'addbook' %}", true);
+                xhttp.setRequestHeader("Content-type", "application/json");
+                xhttp.setRequestHeader('X-CSRFToken', csrfmiddlewaretoken);
+                var content = JSON.stringify({
+                    "bookname": bookname,
+                    "authname": authname,
+                    "isbn": isbn,
+                    "isborrowed": isborrowed,
+                    "maxborrowingperiod": maxborrowingperiod,
+                    "publicationyear": publicationyear,
+                });
+                xhttp.send(content);
+                return false;
+            }
+
+            function validateNotEmpty(str) {
+                if(str) {
+                    return true
+                }
+
+                return false
+            }
+
+            function validateNumNotNegative(num) {
+                return ! (num = NaN || !num || num < 0)
+            }
+            
+        </script>
+    </body>
+</html>

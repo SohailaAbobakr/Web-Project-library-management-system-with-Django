@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Home</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'afterlogin.css' %}">
+</head>
+<body>
+  <header>    
+    <nav>
+      {% load static %}
+        <p class="name"><img class="logo" src="{% static 'open-book.jpg' %}" alt="open-book"> Cairo University Library</p>
+        <ul type="none">  
+            <li><a href="{% url 'afterlogin' %}"class="active">Home</a></li>
+            <li><a href="{% url 'adminupdate' %}">Update</a></li>
+            <li><a href="{%url 'books'%}">Books</a></li>
+            <li ><a href="{% url 'adminlogout' %}">LogOut</a></li>  
+        </ul> 
+    </nav>
+  </header> 
+  <div class="wrapper2"> 
+    <h1>welcome to our library!</h1>
+    <h2>Hello Admin !</h2>
+    <p>As you are Admin..you are now able to do some features, the features avaliable for you now.</p>
+    <button> <a href="{% url 'adminupdate' %}">Update info</a> </button>
+    <button><a href="{% url 'addbook'%}">Add Book</a> </button>
+  </div>
+ 

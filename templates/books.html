@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Student Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'afterlogin.css' %}">
+    <link rel="stylesheet" href="{% static 'books.css' %}">
+</head>
+    <body>
+    <header>    
+        <nav > 
+            {% load static %}
+            <p class="name"><img class="logo" src="{% static 'open-book.jpg' %}" alt="open-book"> Cairo University Library</p>
+            <ul type="none">  
+                <li><a href="{% url 'adminpage' %}">Home</a></li>
+                <li><a href="{% url 'adminupdate' %}">Update</a></li>
+                <li><a href="{%url 'books'%}" class="active">Books</a></li>
+                <li ><a href="{% url 'adminlogout' %}">LogOut</a></li>  
+            </ul>    
+        </nav>
+    </header>
+        <div>
+                
+            <form method="GET" action="{% url 'books' %}" >
+                {% csrf_token %}
+                <label for="search_book" style="color: aliceblue; background-color:chocolate; margin:10px; padding:6px; border-radius:15px"> <b>Browsing books</b> </label>
+                <input name="search_book" type="search" placeholder="Search by book name" style="width: 500px; height:40px">
+            </form>
+        </div>
+        <table >
+            <tr id="header" >
+                <th >Id</th><th>BookName</th> <th>AuthorName</th> <th>ISBN</th> <th>PublicationYear</th> <th>ToUpdate</th>
+            </tr>
+                {% for x in book %}
+            <tr>
+                <td>{{x.id}}</td><td>{{x.BookName}}</td> <td>{{x.AuthorName}}</td> <td>{{x.ISBN}}</td> <td>{{x.PublicationYear}}</td> <td><a href="{% url 'updatebook'%}?id={{x.id}}">update</a></td>
+            </tr>
+                {% endfor %}
+            
+        </table>
+    </body>
+</html>

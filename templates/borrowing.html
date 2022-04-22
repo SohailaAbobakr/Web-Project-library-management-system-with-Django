@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>Student Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'afterlogin.css' %}">
+    <link rel="stylesheet" href="{% static 'books.css' %}">
+    </head>
+    <body>
+    <header>    
+        <nav > 
+            {% load static %}
+            <p class="name"><img class="logo" src="{% static 'open-book.jpg' %}" alt="open-book"> Cairo University Library</p>
+            <ul type="none">  
+                <li><a href="{% url 'afterlogin' %}">Home</a></li>
+                <li><a href="{% url 'update' %}">Update</a></li>
+                <li><a href="{% url 'books_by_students'%}" class="active">Books</a></li>
+                <li ><a href="{% url 'logout' %}">LogOut</a></li>  
+            </ul>    
+        </nav>
+    </header>
+        <div>
+                
+            <form method="POST" action="{% url 'books_by_students' %}" >
+                {% csrf_token %}
+                <label for="borrowing_period" style="color: aliceblue; background-color:chocolate; margin:10px; padding:6px; border-radius:15px"> <b>Borrowing Period</b> </label>
+                <input id="per" name="borrowing_period" type="number" placeholder="7 days" style="width: 500px; height:40px">
+                <button><a href="{% url 'borrowingpage' %}" style="text-decoration:none; color:black">Borrow</a></button>
+                <button onclick="">Back</button><!--back to home-->
+                <div>
+                    {% for message in messages %}
+                    <h5 style="color:green;font-size:large" > {{message}} </h5> 
+                    {% endfor %} 
+                </div> 
+            </form>
+        </div>
+        
+    </body>
+</html>
